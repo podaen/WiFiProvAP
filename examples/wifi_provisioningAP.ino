@@ -13,6 +13,7 @@
 #include "esp_wifi.h"
 
 int cntNetworks = 0;
+uint8_t wifiChannel = 0;
 
 void SysProvWiFiEvent(arduino_event_t* sys_event)
 {
@@ -22,8 +23,6 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
         break;
     case ARDUINO_EVENT_WIFI_SCAN_DONE:
         Serial.println("Completed scan for access points");
-        printNetwork();
-        WiFiProvAP.beginProvisionAP(WIFI_PROV_SCHEME_SOFTAP, WIFI_PROV_SCHEME_HANDLER_NONE, WIFI_PROV_SECURITY_1, "abcd1234", "Prov_123");
         break;
     case ARDUINO_EVENT_WIFI_STA_START:
         Serial.println("WiFi client started");
@@ -47,6 +46,7 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
         Serial.println(IPAddress(sys_event->event_info.got_ip.ip_info.ip.addr));
         WiFi.setSleep(false);//full power
         printConnectivity();
+        // WiFi.getNetworkInfo();
         printFreeGap();
         //connect to clients
         break;
@@ -95,12 +95,13 @@ void setup() {
     while (!Serial);
     printFreeGap();
     //eraseNVS();//erase credentials and etcetera
-    WiFi.mode(WIFI_OFF);//WIFI_OFF//WIFI_STA
-    WiFi.disconnect();//folowing example https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiScan/WiFiScan.ino
-    delay(5000);
+    //WiFi.mode(WIFI_STA);//WIFI_OFF//WIFI_STA//WIFI_AP_STA
+    WiFi.disconnect(true);//folowing example https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiScan/WiFiScan.ino
+    delay(100);
     WiFi.onEvent(SysProvWiFiEvent);
-    scanNetwork(6);//my channel for 2.4GHz (only for testing)
+    scanNetwork();//wifiChannel//my channel for 2.4GHz is 6 (only for testing)
     WiFi.setAutoReconnect(true);
+    WiFiProvAP.beginProvisionAP(WIFI_PROV_SCHEME_SOFTAP, WIFI_PROV_SCHEME_HANDLER_NONE, WIFI_PROV_SECURITY_1, "abcd1234", "Prov_123");
     Serial.println("setup done");
 }
 void loop() {
@@ -161,27 +162,27 @@ void printConnectivity() {
     //Serial.print("Wifi channel: ");
     //Serial.println(WiFi.channel());
 
-    //uint8_t primary;
-    //wifi_second_chan_t second;
-    //err = esp_wifi_get_channel(&primary, &second);
-    //if (err != ESP_OK) {
-    //    Serial.println("Could not get channel!");
-    //    //log_e("Could not get protocol! %d", err);
-    //}
-    //else
-    //{
-    //    Serial.print("primairy channel: ");
-    //    Serial.println(primary);
-    //}
-    //if (second & WIFI_SECOND_CHAN_NONE) {//Doesn't print???
-    //    Serial.println("WiFi_WIFI_SECOND_CHAN_NONE");
-    //}
-    //if (second & WIFI_SECOND_CHAN_ABOVE) {
-    //    Serial.println("WiFi_WIFI_SECOND_CHAN_ABOVE");
-    //}
-    //if (second & WIFI_SECOND_CHAN_BELOW) {
-    //    Serial.println("WiFi_WIFI_SECOND_CHAN_BELOW");
-    //}
+    uint8_t primary;
+    wifi_second_chan_t second;
+    err = esp_wifi_get_channel(&primary, &second);
+    if (err != ESP_OK) {
+        Serial.println("Could not get channel!");
+        //log_e("Could not get protocol! %d", err);
+    }
+    else
+    {
+        Serial.print("primairy channel: ");
+        Serial.println(primary);
+    }
+    if (second & WIFI_SECOND_CHAN_NONE) {//Doesn't print???
+        Serial.println("WiFi_WIFI_SECOND_CHAN_NONE");
+    }
+    if (second & WIFI_SECOND_CHAN_ABOVE) {
+        Serial.println("WiFi_WIFI_SECOND_CHAN_ABOVE");
+    }
+    if (second & WIFI_SECOND_CHAN_BELOW) {
+        Serial.println("WiFi_WIFI_SECOND_CHAN_BELOW");
+    }
 
     //Serial.print("RSSI: ");
     //Serial.println(WiFi.RSSI());
@@ -201,17 +202,20 @@ bool setProtocol() {
     return true;
 }
 void printNetwork() {
-    Serial.println(cntNetworks);
+    //https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiScan/WiFiScan.ino
     //#define WIFI_SCAN_RUNNING (-1)
     //#define WIFI_SCAN_FAILED (-2);
     if (cntNetworks == WIFI_SCAN_FAILED) {
         Serial.println("Scan Failed!");//returs -2
+        return;
     }
     if (!cntNetworks) {
         Serial.println("no networks found");
+        return;
     }
-    else
-    {
+    if (cntNetworks > 0) {
+        Serial.print(cntNetworks);
+        Serial.println(" networks found");
         for (int i = 0; i < cntNetworks; ++i) {
             // Print SSID and RSSI for each network found
             Serial.print(i + 1);
@@ -229,6 +233,7 @@ void printNetwork() {
         Serial.println("");
     }
 }
-void scanNetwork(uint8_t channel) {
-    cntNetworks = WiFi.scanNetworks(false, false, false, 300UL, channel);
+void scanNetwork() {
+    cntNetworks = WiFi.scanNetworks();
+    printNetwork();
 }
