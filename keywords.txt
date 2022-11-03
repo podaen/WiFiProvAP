@@ -6,14 +6,12 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-StreamAnalyserHTTPClient KEYWORD1
+WiFiProvAP KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin    KEYWORD2
-copy    KEYWORD2
-setPath    KEYWORD2
+beginProvisionAP    KEYWORD2
 
 ######################################
 # Constants (LITERAL1)
