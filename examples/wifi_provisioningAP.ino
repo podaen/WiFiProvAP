@@ -9,7 +9,7 @@ to list the networks in the app, be sure that the flash options are:
 Arduino Runs On : Core 1
 Events Run On : Core 0*/
 
-/*# Wi-Fi config in sdkconfig
+/*# additional Wi-Fi config in sdkconfig (not needed)
 CONFIG_ESP32_WIFI_STATIC_RX_BUFFER_NUM=16
 CONFIG_ESP32_WIFI_DYNAMIC_RX_BUFFER_NUM=64
 CONFIG_ESP32_WIFI_DYNAMIC_TX_BUFFER_NUM=64
@@ -111,7 +111,7 @@ void setup() {
     while (!Serial);
     //eraseNVS();//erase credentials and etcetera
     printInfo();
-    WiFi.disconnect(true);//folowing example https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiScan/WiFiScan.ino
+    WiFi.disconnect(true);
     delay(100);
     WiFi.onEvent(SysProvWiFiEvent);
     scanNetwork();
