@@ -19,7 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <!-- <ClInclude Include="$(MSBuildThisFileDirectory)WiFiProvAP.h" /> -->
-    <None Include="$(MSBuildThisFileDirectory)examples\wifi_provisioningAP.ino" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Advanced\WiFiProvAP.ino" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Basic\WiFiProvAPBasic.ino" />
+    <None Include="$(MSBuildThisFileDirectory)platformio.ini" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,9 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)examples\wifi_provisioningAP.ino" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Advanced\WiFiProvAP.ino" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />
+    <None Include="$(MSBuildThisFileDirectory)platformio.ini" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Basic\WiFiProvAPBasic.ino" />
   </ItemGroup>
 </Project>
