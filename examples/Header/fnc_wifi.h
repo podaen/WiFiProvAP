@@ -68,9 +68,6 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
         Serial.println("");
         WiFi.setSleep(false);//full power
         //Connectivity();
-        PrintFreeGap();
-        beginNTP();
-        connectToMqtt();
         //connect to clients
         break;
     case ARDUINO_EVENT_PROV_START:
