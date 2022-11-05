@@ -19,7 +19,6 @@ CONFIG_ESP32_WIFI_AMPDU_TX_ENABLED=y
 CONFIG_ESP32_WIFI_AMPDU_RX_ENABLED=y*/
 
 #include <WiFiProvAP.h>
-#include <WiFi.h>
 
 #include "nvs_flash.h"
 #include "esp_wifi.h"
