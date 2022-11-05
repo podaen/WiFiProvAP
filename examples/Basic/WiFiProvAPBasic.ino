@@ -22,7 +22,6 @@ CONFIG_ESP32_WIFI_AMPDU_RX_ENABLED=y*/
 #include <WiFi.h>
 
 #include "nvs_flash.h"
-#include "esp_wifi.h"
 
 const char* service_name = "my_device";
 //const char* service_key = "password";
@@ -64,7 +63,6 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
         Serial.println(IPAddress(sys_event->event_info.got_ip.ip_info.ip.addr));
         Serial.println("");
         WiFi.setSleep(false);//full power
-        Connectivity();
         printFreeGap();
         //connect to clients
         break;
