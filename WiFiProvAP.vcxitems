@@ -29,6 +29,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\fnc_wifi.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h" />
   </ItemGroup>
 </Project>

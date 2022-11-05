@@ -29,7 +29,7 @@
     <None Include="$(MSBuildThisFileDirectory)examples\Simple\sketch.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\fnc_wifi.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
