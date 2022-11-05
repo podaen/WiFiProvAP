@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{19dd5b4b-689e-42c0-94ce-28e6c04a2042}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+<Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).gitattributes" />
+<None Include="$(MSBuildThisFileDirectory).gitignore" />
+<None Include="$(MSBuildThisFileDirectory)esp32-WiFi-2.0.0.vcxitems" />
+<None Include="$(MSBuildThisFileDirectory)esp32-WiFi.sln" />
+<None Include="$(MSBuildThisFileDirectory)esp32-WiFi.vcxitems" />
+<None Include="$(MSBuildThisFileDirectory)esp32-WiFi.vcxitems.filters" />
+<None Include="$(MSBuildThisFileDirectory)esp32-WiFi.vcxitems.user" />
+<None Include="$(MSBuildThisFileDirectory)platformio.ini" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>
