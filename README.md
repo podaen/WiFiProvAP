@@ -1,6 +1,6 @@
 # Provisioning for Arduino
 
-This sketch implements provisioning using various IDF components
+This sketch implements provisioning using various IDF components and Arduino components
 
 # Description
 
