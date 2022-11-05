@@ -9,10 +9,10 @@
 *.user
 *.userosscache
 *.sln.docstates
-git status :!*.vcxitems
-git status :!*.vcxitems.filters
-git status :!*.sln
-git status :!*.gitattributes
+*.vcxitems
+*.vcxitems.filters
+*.sln
+*.gitattributes
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
