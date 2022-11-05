@@ -32,6 +32,65 @@ const char* pop = "abcd1234";
 
 int cntNetworks = 0;//WiFiScan
 
+/*CHIP INFO*/
+void chipInfo() {
+    esp_chip_info_t chip_info;
+    esp_chip_info(&chip_info);
+    printf("This is ESP32 chip with %d CPU cores\nWiFi%s%s\n",
+        chip_info.cores,
+        (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
+        (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
+
+    printf("silicon revision %d\n", chip_info.revision);
+
+    printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
+        (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
+
+    String chipId = String((uint32_t)ESP.getEfuseMac(), HEX);
+    chipId.toUpperCase();
+
+    Serial.printf("Chip id: %s\n", chipId.c_str());
+
+    String Modelno = ESP.getChipModel();
+
+    Serial.printf("Model number: %s\n", Modelno.c_str());
+}
+void getCPUspeed() {
+    Serial.print("CPU Freq: ");
+    Serial.println(getCpuFrequencyMhz());
+}
+void setCPUspeed(uint32_t MHz) {
+    setCpuFrequencyMhz(MHz);
+}
+void printFreeGap() {
+    //getFreeHeap: 251940 from 290116
+    Serial.println("");
+    Serial.print("xPortGetFreeHeapSize: ");
+    Serial.println(xPortGetFreeHeapSize());
+    Serial.print("getFreeHeap: ");
+    Serial.println(ESP.getFreeHeap());//290116//Since ESP32 has 328 KiB of data RAM
+    Serial.print("getFreePsram: ");
+    Serial.println(ESP.getFreePsram());
+    Serial.println("");
+}
+void printInfo() {
+    Serial.println("");
+    Serial.println("");
+    Serial.println(F("START " __FILE__));
+    Serial.println(F("FROM " __DATE__));
+    Serial.println("");
+    chipInfo();
+    getCPUspeed();
+    printFreeGap();
+}
+/*ERASE FLASH SETTINGS*/
+void eraseNVS() {
+    esp_err_t ret;
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    ret = nvs_flash_init();
+    Serial.println("nvs flash erased");
+    ESP_ERROR_CHECK(ret);
+}
 /*EVENTS*/
 void SysProvWiFiEvent(arduino_event_t* sys_event)
 {
@@ -121,14 +180,6 @@ void setup() {
 void loop() {
     delay(50);
 }
-/*ERASE FLASH SETTINGS*/
-void eraseNVS() {
-    esp_err_t ret;
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    ret = nvs_flash_init();
-    Serial.println("nvs flash erased");
-    ESP_ERROR_CHECK(ret);
-}
 /*deINI*/
 void deiniWifi() {
     Serial.println("Deintialize WiFi");
@@ -137,11 +188,17 @@ void deiniWifi() {
     WiFi.mode(WIFI_OFF);//espWiFiStop
 }
 /*NETWORK DETAILS*/
-void Connectivity() {
+bool setProtocol() {
     esp_err_t err;
-    getProtocol();
-    getBandwide();
-    Serial.println("");
+    const uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
+    err = esp_wifi_set_protocol(WIFI_IF_STA, protocol);
+    if (err != ESP_OK) {
+        //258 = ESP_ERR_INVALID_ARG
+        Serial.println(err);
+        Serial.println("Could not set protocol!");
+        return false;
+    }
+    return true;
 }
 void getProtocol() {
     esp_err_t err;
@@ -166,35 +223,6 @@ void getProtocol() {
         Serial.println("WiFi_Protocol_11b");
     }
 }
-bool setProtocol() {
-    esp_err_t err;
-    const uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
-    err = esp_wifi_set_protocol(WIFI_IF_STA, protocol);
-    if (err != ESP_OK) {
-        //258 = ESP_ERR_INVALID_ARG
-        Serial.println(err);
-        Serial.println("Could not set protocol!");
-        return false;
-    }
-    return true;
-}
-void getBandwide() {
-    esp_err_t err;
-    wifi_bandwidth_t wifi_bandwidth;
-    err = esp_wifi_get_bandwidth(WIFI_IF_STA, &wifi_bandwidth);
-    if (err != ESP_OK) {
-        Serial.println("Could not get bandwide!");
-        //log_e("Could not get protocol! %d", err);
-    }
-    if (wifi_bandwidth & WIFI_BW_HT20) {
-        Serial.println("WiFi_Bandwide_WIFI_BW_HT20");
-        setBandwide();
-    }
-    if (wifi_bandwidth & WIFI_BW_HT40) {
-        //WIFI_BW_HT40 is supported only when the interface support 11N
-        Serial.println("WiFi_Bandwide_WIFI_BW_HT40");
-    }
-}
 bool setBandwide() {
     esp_err_t err;
     wifi_bandwidth_t wifi_bandwidth = WIFI_BW_HT40;//WIFI_BW_HT20
@@ -216,6 +244,23 @@ bool setBandwide() {
     {
         Serial.println("bandwide set to WIFI_BW_HT40");
         return true;
+    }
+}
+void getBandwide() {
+    esp_err_t err;
+    wifi_bandwidth_t wifi_bandwidth;
+    err = esp_wifi_get_bandwidth(WIFI_IF_STA, &wifi_bandwidth);
+    if (err != ESP_OK) {
+        Serial.println("Could not get bandwide!");
+        //log_e("Could not get protocol! %d", err);
+    }
+    if (wifi_bandwidth & WIFI_BW_HT20) {
+        Serial.println("WiFi_Bandwide_WIFI_BW_HT20");
+        setBandwide();
+    }
+    if (wifi_bandwidth & WIFI_BW_HT40) {
+        //WIFI_BW_HT40 is supported only when the interface support 11N
+        Serial.println("WiFi_Bandwide_WIFI_BW_HT40");
     }
 }
 void getChannel() {
@@ -243,6 +288,12 @@ void getChannel() {
     if (second & WIFI_SECOND_CHAN_BELOW) {
         Serial.println("WiFi_WIFI_SECOND_CHAN_BELOW");
     }
+}
+void Connectivity() {
+    esp_err_t err;
+    getProtocol();
+    getBandwide();
+    Serial.println("");
 }
 /*SCAN NETWORK*/
 void scanNetwork() {
@@ -279,55 +330,4 @@ void printNetwork() {
         }
         Serial.println("");
     }
-}
-/*CHIP INFO*/
-void printInfo() {
-    Serial.println("");
-    Serial.println("");
-    Serial.println(F("START " __FILE__));
-    Serial.println(F("FROM " __DATE__));
-    Serial.println("");
-    chipInfo();
-    getCPUspeed();
-    printFreeGap();
-}
-void chipInfo() {
-    esp_chip_info_t chip_info;
-    esp_chip_info(&chip_info);
-    printf("This is ESP32 chip with %d CPU cores\nWiFi%s%s\n",
-        chip_info.cores,
-        (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
-        (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
-
-    printf("silicon revision %d\n", chip_info.revision);
-
-    printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
-        (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
-
-    String chipId = String((uint32_t)ESP.getEfuseMac(), HEX);
-    chipId.toUpperCase();
-
-    Serial.printf("Chip id: %s\n", chipId.c_str());
-
-    String Modelno = ESP.getChipModel();
-
-    Serial.printf("Model number: %s\n", Modelno.c_str());
-}
-void getCPUspeed() {
-    Serial.print("CPU Freq: ");
-    Serial.println(getCpuFrequencyMhz());
-}
-void setCPUspeed(uint32_t MHz) {
-    setCpuFrequencyMhz(MHz);
-}
-void printFreeGap() {
-    //getFreeHeap: 251940 from 290116
-    Serial.println("");
-    Serial.print("xPortGetFreeHeapSize: ");
-    Serial.println(xPortGetFreeHeapSize());
-    Serial.print("getFreeHeap: ");
-    Serial.println(ESP.getFreeHeap());//290116//Since ESP32 has 328 KiB of data RAM
-    Serial.print("getFreePsram: ");
-    Serial.println(ESP.getFreePsram());
-    Serial.println("");
 }

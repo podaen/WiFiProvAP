@@ -31,6 +31,26 @@ const char* pop = "abcd1234";
 
 int cntNetworks = 0;//WiFiScan
 
+/*ERASE FLASH SETTINGS*/
+void eraseNVS() {
+    esp_err_t ret;
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    ret = nvs_flash_init();
+    Serial.println("nvs flash erased");
+    ESP_ERROR_CHECK(ret);
+}
+/*Print freeGap*/
+void printFreeGap() {
+    //getFreeHeap: 251940 from 290116
+    Serial.println("");
+    Serial.print("xPortGetFreeHeapSize: ");
+    Serial.println(xPortGetFreeHeapSize());
+    Serial.print("getFreeHeap: ");
+    Serial.println(ESP.getFreeHeap());//290116//Since ESP32 has 328 KiB of data RAM
+    Serial.print("getFreePsram: ");
+    Serial.println(ESP.getFreePsram());
+    Serial.println("");
+}
 /*EVENTS*/
 void SysProvWiFiEvent(arduino_event_t* sys_event)
 {
@@ -106,6 +126,8 @@ void setup() {
     Serial.begin(115200);
     while (!Serial);
     //eraseNVS();//erase credentials and etcetera
+    WiFi.disconnect(true);
+    delay(100);
     WiFi.onEvent(SysProvWiFiEvent);
     WiFi.setAutoReconnect(true);
     WiFiProvAP.beginProvisionAP(WIFI_PROV_SCHEME_SOFTAP, WIFI_PROV_SCHEME_HANDLER_NONE, security, pop, service_name);
@@ -114,24 +136,4 @@ void setup() {
 }
 void loop() {
     delay(50);
-}
-/*ERASE FLASH SETTINGS*/
-void eraseNVS() {
-    esp_err_t ret;
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    ret = nvs_flash_init();
-    Serial.println("nvs flash erased");
-    ESP_ERROR_CHECK(ret);
-}
-/*Print freeGap*/
-void printFreeGap() {
-    //getFreeHeap: 251940 from 290116
-    Serial.println("");
-    Serial.print("xPortGetFreeHeapSize: ");
-    Serial.println(xPortGetFreeHeapSize());
-    Serial.print("getFreeHeap: ");
-    Serial.println(ESP.getFreeHeap());//290116//Since ESP32 has 328 KiB of data RAM
-    Serial.print("getFreePsram: ");
-    Serial.println(ESP.getFreePsram());
-    Serial.println("");
 }
