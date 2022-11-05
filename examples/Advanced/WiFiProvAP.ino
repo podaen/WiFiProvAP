@@ -95,8 +95,6 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
     }
     case ARDUINO_EVENT_PROV_CRED_SUCCESS:
         Serial.println("\nProvisioning Successful");
-        //WiFi.onEvent(WiFiEvent);
-        //WiFi.removeEvent(SysProvEvent);
         break;
     case ARDUINO_EVENT_PROV_END:
         Serial.println("\nProvisioning Ends");
