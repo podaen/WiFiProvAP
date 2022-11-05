@@ -107,6 +107,7 @@ void SysProvWiFiEvent(arduino_event_t* sys_event)
 }
 /*MAIN*/
 void startWifi() {
+    Serial.println("login to WiFi");
     //eraseNVS();//erase credentials and etcetera
     WiFi.disconnect(true);
     delay(100);

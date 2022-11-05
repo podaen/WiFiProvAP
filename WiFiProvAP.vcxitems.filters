@@ -26,9 +26,10 @@
     <None Include="$(MSBuildThisFileDirectory)README.md" />
     <None Include="$(MSBuildThisFileDirectory)platformio.ini" />
     <None Include="$(MSBuildThisFileDirectory)examples\Basic\WiFiProvAPBasic.ino" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Simple\sketch.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)examples\Header\fnc_wifi.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\fnc_wifi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

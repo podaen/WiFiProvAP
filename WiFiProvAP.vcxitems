@@ -21,6 +21,7 @@
     <!-- <ClInclude Include="$(MSBuildThisFileDirectory)WiFiProvAP.h" /> -->
     <None Include="$(MSBuildThisFileDirectory)examples\Advanced\WiFiProvAP.ino" />
     <None Include="$(MSBuildThisFileDirectory)examples\Basic\WiFiProvAPBasic.ino" />
+    <None Include="$(MSBuildThisFileDirectory)examples\Simple\sketch.ino" />
     <None Include="$(MSBuildThisFileDirectory)platformio.ini" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
@@ -28,6 +29,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)examples\Header\fnc_wifi.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\fnc_wifi.h" />
   </ItemGroup>
 </Project>
