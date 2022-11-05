@@ -27,4 +27,9 @@
     <None Include="$(MSBuildThisFileDirectory)platformio.ini" />
     <None Include="$(MSBuildThisFileDirectory)examples\Basic\WiFiProvAPBasic.ino" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)examples\Header\fnc_wifi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
