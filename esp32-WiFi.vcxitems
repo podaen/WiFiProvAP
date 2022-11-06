@@ -17,6 +17,7 @@
   <ItemGroup>
     <Text Include="$(MSBuildThisFileDirectory)library.properties" />
     <Text Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.h" />
+    <Text Include="$(MSBuildThisFileDirectory)src\esp32-WiFiP.h" />
   </ItemGroup>
   <ItemGroup>
     <!-- <ClInclude Include="$(MSBuildThisFileDirectory)WiFiProvAP.h" /> -->
@@ -28,8 +29,5 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h" />
   </ItemGroup>
 </Project>

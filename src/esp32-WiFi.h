@@ -1,4 +1,6 @@
-#pragma once
+//#pragma once
+#ifndef esp32-WiFi_h
+#define esp32-WiFi_h
 /*download the "esp prov" app for android or ios
 to list the networks in the app, be sure that the flash options are:
 Arduino Runs On : Core 1
@@ -269,3 +271,4 @@ void scanNetwork() {
     cntNetworks = WiFi.scanNetworks();
     printNetwork();
 }
+#endif
