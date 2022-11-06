@@ -13,6 +13,6 @@
   <ItemGroup>
     <Text Include="$(MSBuildThisFileDirectory)library.properties" />
     <Text Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.h" />
-    <Text Include="$(MSBuildThisFileDirectory)src\esp32-WiFiP.h" />
+    <Text Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h" />
   </ItemGroup>
 </Project>

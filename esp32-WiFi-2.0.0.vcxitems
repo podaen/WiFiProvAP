@@ -18,7 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\WiFiProvAP.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFiP.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\esp32-WiFi.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
